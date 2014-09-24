@@ -6,6 +6,16 @@ class nginx {
 	  target  => '/vagrant/app',
 	}
 
+	file { '/var/log/nginx/access.log':
+	  ensure  => 'link',
+	  target  => '/vagrant/log/access.log',
+	}
+
+	file { '/var/log/nginx/error.log':
+	  ensure  => 'link',
+	  target  => '/vagrant/log/error.log',
+	}
+
 	package { 'nginx':
 	  ensure => 'present',
 	  require => Exec['apt-get update'],
