@@ -9,7 +9,7 @@ server {
   }
 
   location ~ \.php$ {
-    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_pass /var/run/php5-fpm.www.sock;
     fastcgi_index index.php;
     include fastcgi_params;
   }
