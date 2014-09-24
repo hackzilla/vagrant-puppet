@@ -4,13 +4,26 @@ server {
   root /var/www/app;
   index index.php;
 
-  location / {
-    try_files $uri /index.php;
+  location /app_dev.php {
+    try_files $uri /app_dev.php/$args;
   }
 
-  location ~ \.php$ {
-    fastcgi_pass /var/run/php5-fpm.www.sock;
-    fastcgi_index index.php;
+  location / {
+    try_files $uri @rewriteapp;
+  }
+
+  location @rewriteapp {
+    rewrite ^(.*)$ /app.php/$1 last;
+  }
+ 
+  location ~ ^/(app|app_dev)\.php(/|$) {
+    fastcgi_pass unix:/var/run/php5-fpm.www.sock;
+    fastcgi_split_path_info ^(.+\.php)(/.*)$;
     include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param HTTPS off;
+    fastcgi_buffer_size 4k;
+    fastcgi_buffers 256 4k;
+    fastcgi_max_temp_file_size 0;
   }
 }
