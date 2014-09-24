@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
 
-  config.vm.synced_folder ".", "/vagrant", nfs: true
+  config.vm.synced_folder ".", "/vagrant", nfs: false
 
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = 'puppet/manifests'
